@@ -1,0 +1,72 @@
+
+[
+    {
+    "id": 1,
+    "name": "Dream Cake",
+    "category": "Pastries",
+    "price": 80.0,
+    "description": "Rich and moist chocolate cake topped with filled with chocolate mousse and chocolate ganache."
+    },
+    {
+     "id": 2,
+    "name": "Chocolate Crinkles",
+    "category": "Pastries",
+    "price": 100.0,
+    "description": "Chewy and soft chocolate crinkles that rich in chocolatey flavor."
+     },
+    { "id": 3,
+      "name": "Creamcheese Ensaymada 6PCS",
+      "category": "Breads", 
+      "price": 230.0,
+      "description": "Soft, buttery texture and rich cheesy flavor. It's filled with a generous amount of cream cheese and topped with a sweet, sometimes slightly salty, cheese topping, making it a perfect balance of savory and sweet."
+     },
+     { "id": 4,
+      "name": "Creamcheese Ensaymada 4PCS",
+      "category": "Breads", 
+      "price": 160.0,
+      "description": "Soft, buttery texture and rich cheesy flavor. It's filled with a generous amount of cream cheese and topped with a sweet, sometimes slightly salty, cheese topping, making it a perfect balance of savory and sweet."
+     },
+     { "id": 5,
+      "name": "Creamcheese Ensaymada Solo",
+      "category": "Breads", 
+      "price": 45.0,
+      "description": "Soft, buttery texture and rich cheesy flavor. It's filled with a generous amount of cream cheese and topped with a sweet, sometimes slightly salty, cheese topping, making it a perfect balance of savory and sweet."
+     },
+     {
+    "id": 6, 
+    "name": "Chocolate Mousse Cake", 
+    "category": "Cakes", 
+    "price": 700.0,
+    "description": "Has a layer of moist chocolate cake, a thick layer of fluffy chocolate mousse, and a layer of rich chocolate ganache."
+    },
+    { "id": 7,
+     "name": "Ube Mousse Cake",
+      "category": "Cakes",
+       "price": 700.0,
+       "description": "Light and creamy dessert featuring a rich, velvety ube mousse, made with the sweet, nutty flavor of purple yam"
+    },
+    { "id": 8,
+     "name": "Cheese Mousse Cake",
+      "category": "Cakes",
+       "price": 700.0,
+       "description": "Light and creamy dessert featuring a rich, velvety cheesy mousse."
+    },
+    { "id": 9,
+     "name": "Red Velvet Mousse Cake",
+      "category": "Cakes",
+       "price": 700.0,
+       "description": "red colored layer cake with cream cheese or ermine icing"
+    },
+        { "id": 10,
+     "name": "Cupcake Half Dozen",
+      "category": "Cupcakes",
+       "price": 150.0,
+       "description": "The base is a rich and dense flourless cake contrasted with light and creamy chocolate mousse on top"
+    },
+    { "id": 11,
+     "name": "Cupcake One Dozen",
+      "category": "Cupcakes",
+       "price": 250.0,
+             "description": "The base is a rich and dense flourless cake contrasted with light and creamy chocolate mousse on top"
+    }
+]
