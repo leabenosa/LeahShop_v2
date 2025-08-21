@@ -5,12 +5,7 @@ import ProductList from './screens/ProductList';
 import ProductDetails from './screens/ProductDetails';
 import CartScreen from './screens/CartScreen';
 import { CartProvider } from './context/CartContext'; 
-
-export type RootStackParamList = {
-  ProductList: undefined;
-  ProductDetails: { product: any };
-  CartScreen: undefined;
-};
+import type { RootStackParamList } from './types/navigation';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -30,7 +25,7 @@ export default function App() {
             options={{ title: "Product Details" }}
           />
           <Stack.Screen
-            name="CartScreen"
+            name="Cart"
             component={CartScreen}
             options={{ title: "Cart" }}
           />
