@@ -1,9 +1,24 @@
-import React from "react";
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import React, { useLayoutEffect } from "react";
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert, Image } from "react-native";
 import { useCart } from "../context/CartContext";
 
-export default function CartScreen() {
+const HeaderHomeButton = ({ navigation }: { navigation: any }) => {
+  return (
+    <TouchableOpacity onPress={() => navigation.navigate("ProductList")} style={styles.headerButton}>
+      <Image source={require("../assets/home.jpg")} style={styles.headerIcon} />
+    </TouchableOpacity>
+  );
+};
+
+export default function CartScreen({ navigation }: any) {
   const { cartItems, removeFromCart, clearCart } = useCart();
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      // eslint-disable-next-line react/no-unstable-nested-components
+      headerRight: () => <HeaderHomeButton navigation={navigation} />,
+    });
+  }, [navigation]);
 
   const total = cartItems.reduce((sum, item) => sum + item.price, 0);
 
@@ -73,12 +88,12 @@ const styles = StyleSheet.create({
   itemPrice: { marginTop: 4, fontWeight: "bold" },
   removeButton: {
     backgroundColor: "#fc6c91",
-    paddingVertical: 6,
+    paddingVertical: 4,
     paddingHorizontal: 12,
     borderRadius: 6,
     justifyContent: "center",
   },
-  removeButtonText: { color: "white", fontWeight: "bold" },
+  removeButtonText: { color: "white", fontWeight: "bold" ,   fontSize: 13  },
   footer: { marginTop: 20 },
   total: { fontSize: 20, fontWeight: "bold", marginBottom: 10 },
   clearButton: {
@@ -88,7 +103,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   clearButtonText: { color: "white", fontWeight: "bold" },
-  flatListContent: {
-    paddingBottom: 20,
-  },
+  flatListContent: { paddingBottom: 20 },
+  headerButton: { marginRight: 15 },
+  headerIcon: { width: 40, height: 40 },
 });
