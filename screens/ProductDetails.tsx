@@ -19,7 +19,7 @@ export default function ProductDetails({ route, navigation }: Props) {
 
   const handleAddToCart = () => {
     addToCart({ id, name, category, price, description, imageUri });
-    navigation.navigate("Cart"); // go to Cart screen after adding
+    navigation.navigate("Cart"); 
   };
 
   return (
