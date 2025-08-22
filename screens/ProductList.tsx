@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import productsData from '../Products.json';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../types/navigation';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Product {
   id: number;
@@ -11,6 +12,7 @@ interface Product {
   category: string;
   price: number;
   description?: string;
+  quantity?: number; 
 }
 
 type ProductListNavigationProp = NativeStackNavigationProp<
@@ -25,10 +27,10 @@ export default function ProductList({ navigation }: { navigation: ProductListNav
   const categories = [...new Set(productsData.map(product => product.category))];
 
   const categoryColors: Record<string, string> = {
-    Pastries: '#f7d6faff',   
-    Breads: '#f3b3ecff',     
-    Cakes: '#fc72a0ff',     
-    Cupcakes: '#fa8fc5ff',  
+    Pastries: '#f7d6faff',
+    Breads: '#f3b3ecff',
+    Cakes: '#fc72a0ff',
+    Cupcakes: '#fa8fc5ff',
   };
 
   const maxPrice = products.length > 0 ? Math.max(...products.map(p => p.price)) : 0;
@@ -36,6 +38,25 @@ export default function ProductList({ navigation }: { navigation: ProductListNav
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, maxPrice]);
   const [sortOption, setSortOption] = useState<string>('');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const addToCart = async (product: Product) => {
+    try {
+      const existingCart = await AsyncStorage.getItem('cart');
+      let cart = existingCart ? JSON.parse(existingCart) : [];
+
+      const index = cart.findIndex((item: Product) => item.id === product.id);
+      if (index > -1) {
+        cart[index].quantity += 1;
+      } else {
+        cart.push({ ...product, quantity: 1 });
+      }
+
+      await AsyncStorage.setItem('cart', JSON.stringify(cart));
+      console.log('Added to cart:', product.name);
+    } catch (error) {
+      console.log('Error adding to cart', error);
+    }
+  };
 
   const filterAndSort = useCallback(() => {
     let filteredList = [...products];
@@ -75,34 +96,31 @@ export default function ProductList({ navigation }: { navigation: ProductListNav
 
   return (
     <SafeAreaView style={styles.container}>
-     
       <View style={styles.header}>
         <Image source={require('../assets/logo.png')} style={styles.logo} />
         <Text style={styles.shopName}>Leah's Shop</Text>
       </View>
 
-     
       <View style={styles.filters}>
         <Text style={styles.filterTitle}>Categories</Text>
         <View style={styles.categoryList}>
           {categories.map(category => {
-  const isSelected = selectedCategories.includes(category);
-  return (
-    <TouchableOpacity
-      key={category}
-      style={[
-        styles.categoryButton,
-        { backgroundColor: categoryColors[category] || '#ccc' },
-        isSelected && styles.categoryButtonActive,
-      ]}
-      onPress={() => toggleCategory(category)}
-    >
-      <Text style={styles.checkboxSymbol}>{isSelected ? '☑' : '☐'}</Text>
-      <Text style={styles.categoryButtonText}>{category}</Text>
-    </TouchableOpacity>
-  );
-})}
-
+            const isSelected = selectedCategories.includes(category);
+            return (
+              <TouchableOpacity
+                key={category}
+                style={[
+                  styles.categoryButton,
+                  { backgroundColor: categoryColors[category] || '#ccc' },
+                  isSelected && styles.categoryButtonActive,
+                ]}
+                onPress={() => toggleCategory(category)}
+              >
+                <Text style={styles.checkboxSymbol}>{isSelected ? '☑' : '☐'}</Text>
+                <Text style={styles.categoryButtonText}>{category}</Text>
+              </TouchableOpacity>
+            );
+          })}
         </View>
 
         <Text style={styles.filterTitle}>Price Range</Text>
@@ -153,7 +171,6 @@ export default function ProductList({ navigation }: { navigation: ProductListNav
         </TouchableOpacity>
       </View>
 
-     
       <FlatList
         data={filteredProducts}
         keyExtractor={product => product.id.toString()}
@@ -169,23 +186,25 @@ export default function ProductList({ navigation }: { navigation: ProductListNav
           });
 
           return (
-            <TouchableOpacity
-              style={[styles.productCard, categoryStyle]}
-              onPress={() =>
-                navigation.navigate('ProductDetails', {
-                  id: product.id,
-                  name: product.name,
-                  category: product.category,
-                  price: product.price,
-                  description: product.description ?? 'This is a dummy description for now.',
-                  imageUri: undefined,
-                })
-              }
-            >
-              <Text style={styles.productName}>{product.name}</Text>
-              <Text style={styles.categoryText}>{product.category}</Text>
-              <Text>{formattedPrice}</Text>
-            </TouchableOpacity>
+            <View style={[styles.productCard, categoryStyle]}>
+              <TouchableOpacity
+                style={styles.productDetailsButton}
+                onPress={() =>
+                  navigation.navigate('ProductDetails', {
+                    id: product.id,
+                    name: product.name,
+                    category: product.category,
+                    price: product.price,
+                    description: product.description ?? 'This is a dummy description for now.',
+                    imageUri: undefined,
+                  })
+                }
+              >
+                <Text style={styles.productName}>{product.name}</Text>
+                <Text style={styles.categoryText}>{product.category}</Text>
+                <Text>{formattedPrice}</Text>
+              </TouchableOpacity>
+            </View>
           );
         }}
       />
@@ -203,17 +222,18 @@ const styles = StyleSheet.create({
   filterTitle: { fontWeight: 'bold', marginTop: 10 },
 
   categoryList: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginVertical: 5 },
- categoryButton: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  paddingVertical: 6,
-  paddingHorizontal: 10,
-  borderRadius: 5,
-  backgroundColor: '#ccc',
-  marginLeft: -8,
-},
+  categoryButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    backgroundColor: '#ccc',
+    marginLeft: -8,
+  },
   categoryButtonActive: { borderWidth: 2, borderColor: '#000' },
   categoryButtonText: { fontWeight: 'bold', fontSize: 13 },
+  checkboxSymbol: { marginRight: 6, fontSize: 14 },
 
   input: {
     borderWidth: 1,
@@ -258,9 +278,5 @@ const styles = StyleSheet.create({
   },
   productName: { fontWeight: 'bold', fontSize: 16 },
   categoryText: { fontSize: 14, marginBottom: 5 },
-  checkboxSymbol: {
-  marginRight: 6,
-  fontSize: 14,
-},
-
+  productDetailsButton: { flex: 1 },
 });
