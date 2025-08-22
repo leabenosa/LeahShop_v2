@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#fff",
+    backgroundColor: "#ffe4ec",
   },
   image: {
     width: 150,
@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 8,
     textAlign: "center",
+    color: "#0e0308ff",
   },
   category: {
     fontSize: 16,
@@ -71,6 +72,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 12,
     textAlign: "center",
+    color: "#fa1313ff",
   },
   description: {
     fontSize: 14,
